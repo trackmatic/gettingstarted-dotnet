@@ -36,109 +36,102 @@ namespace Trackmatic.GettingStarted
             // The fastest way to creata a route is by using a template
             // In this scenario we are create a template using the API, however this can also be done through the front end
             // Typically you would have a template per branch/depot in a milk run scenario
-            var templateId = CreateTemplate();
+            var templateId = "110/00983cfd-0131-4a52-9f44-64a3738662f5";
 
             // Create a list of DECO's to be uploaded
             var decos = new List<OLocation>
-                {
-                    Decos.SandtonCity(_clientId),
-
-                    Decos.TheCampus(_clientId),
-
-                    Decos.FourwaysMall(_clientId),
-
-                    Decos.Adhoc(_clientId, "My New Adhoc Deco", "MNAD")
-                };
+            {
+                Decos.SandtonCity(_clientId),
+                Decos.TheCampus(_clientId),
+                Decos.FourwaysMall(_clientId),
+                Decos.Adhoc(_clientId, "My New Adhoc Deco", "MNAD")
+            };
 
             // Create a list of actions to be uploaded
             var actions = new[]
-                {
-                    Actions.Collection(_clientId, decos[0], "4ACTION0_1"),
-                    Actions.Collection(_clientId, decos[0], "4ACTION0_2"),
-                    Actions.Collection(_clientId, decos[0], "4ACTION0_3"),
-                    Actions.Collection(_clientId, decos[0], "4ACTION0_4"),
-                    Actions.Collection(_clientId, decos[1], "4ACTION0_5"),
-                    Actions.Collection(_clientId, decos[1], "4ACTION0_6"),
-                    Actions.Collection(_clientId, decos[1], "4ACTION0_7"),
-                    Actions.Collection(_clientId, decos[1], "4ACTION0_8"),
-                    Actions.Collection(_clientId, decos[1], "4ACTION0_9")
-                };
+            {
+                Actions.Collection(_clientId, decos[0], "4ACTION0_1"),
+                Actions.Collection(_clientId, decos[0], "4ACTION0_2"),
+                Actions.Collection(_clientId, decos[0], "4ACTION0_3"),
+                Actions.Collection(_clientId, decos[0], "4ACTION0_4"),
+                Actions.Collection(_clientId, decos[1], "4ACTION0_5"),
+                Actions.Collection(_clientId, decos[1], "4ACTION0_6"),
+                Actions.Collection(_clientId, decos[1], "4ACTION0_7"),
+                Actions.Collection(_clientId, decos[1], "4ACTION0_8"),
+                Actions.Collection(_clientId, decos[1], "4ACTION0_9")
+            };
 
             // Create a list of entities to be uploaded
             var entities = new[]
+            {
+                Entities.Entity(_clientId, "entity/demo/1", "Entity 1", e =>
                 {
-                    Entities.Entity(_clientId, "entity/demo/1", "Entity 1", e =>
+                    // Requirements describe what the driver will be requried to capture when completing an entity visit
+                    // This is only applicable if infinity devices are being used
+                    e.Requirements = new ObservableCollection<EntityRequirement>()
+                    {
+                        new RequireRating
                         {
-                            // Requirements describe what the driver will be requried to capture when completing an entity visit
-                            // This is only applicable if infinity devices are being used
-                            e.Requirements = new ObservableCollection<EntityRequirement>
-                                {
+                            Ratings = new List<RatingDescription>
+                            {
+                                new RatingDescription {Name = "Service", Type = "Simple"}
+                            }
+                        }
+                    };
 
-                                };
+                }),
 
-                        }),
-
-                    Entities.Entity(_clientId, "entity/demo/2", "Entity 2", e =>
+                Entities.Entity(_clientId, "entity/demo/2", "Entity 2", e =>
+                {
+                    e.Requirements = new ObservableCollection<EntityRequirement>
+                    {
+                        new RequireActionDebrief(),
+                        new RequireRating
                         {
-                            e.Requirements = new ObservableCollection<EntityRequirement>
-                                {
-                                    new RequireActionDebrief(),
+                            Ratings = new List<RatingDescription>
+                            {
+                                new RatingDescription {Name = "Service", Type = "Smiley"}
+                            }
+                        },
+                    };
 
-                                    new RequireSignature()
-                                };
-                            
-                        }),
+                }),
 
-                    Entities.Entity(_clientId, "entity/demo/3", "Entity 3", e =>
-                        {
+                Entities.Entity(_clientId, "entity/demo/3", "Entity 3", e =>
+                {
 
-                            e.Requirements = new ObservableCollection<EntityRequirement>
-                                {
-                                    new RequireSignature()
-                                };
-                        }),
+                    e.Requirements = new ObservableCollection<EntityRequirement>();
+                }),
 
-                    Entities.Entity(_clientId, "entity/demo/4", "Entity 4", e =>
-                        {
+                Entities.Entity(_clientId, "entity/demo/4", "Entity 4", e =>
+                {
+                    e.Requirements = new ObservableCollection<EntityRequirement>();
+                }),
 
-                            e.Requirements = new ObservableCollection<EntityRequirement>
-                                {
-                                    new RequireActionDebrief(),
-
-                                    new RequireSignature()
-                                };
-                        }),
-
-                    Entities.Entity(_clientId, "entity/demo/5", "Entity 5", e =>
-                        {
-
-                            e.Requirements = new ObservableCollection<EntityRequirement>
-                                {
-                                    new RequireActionDebrief(),
-
-                                    new RequireSignature()
-                                };
-                        })
-                };
+                Entities.Entity(_clientId, "entity/demo/5", "Entity 5", e =>
+                {
+                    e.Requirements = new ObservableCollection<EntityRequirement>();
+                })
+            };
 
             // Create the relationships between the various components
             var relationships = new[]
+            {
+                Relationship.Link(actions[0]).To(entities[0]).At(decos[0]).OnRun(0).Customise(x => x.Mst = TimeSpan.FromMinutes(8)),
+                Relationship.Link(actions[1]).To(entities[0]).At(decos[0]).OnRun(0).Customise(x => x.Mst = TimeSpan.FromMinutes(8)),
+                Relationship.Link(actions[2]).To(entities[1]).At(decos[0]).OnRun(0).Customise(x => x.Mst = TimeSpan.FromMinutes(8)),
+                Relationship.Link(actions[3]).To(entities[1]).At(decos[0]).OnRun(0).Customise(x => x.Mst = TimeSpan.FromMinutes(8)),
+                Relationship.Link(actions[4]).To(entities[2]).At(decos[1]).OnRun(0).Customise(x => x.Mst = TimeSpan.FromMinutes(8)),
+                Relationship.Link(actions[5]).To(entities[2]).At(decos[1]).OnRun(0).Customise(x =>
                 {
-                    Relationship.Link(actions[0]).To(entities[0]).At(decos[0]).OnRun(0).Customise(x => x.Mst = TimeSpan.FromMinutes(8)),
-                    Relationship.Link(actions[1]).To(entities[0]).At(decos[0]).OnRun(0).Customise(x => x.Mst = TimeSpan.FromMinutes(8)),
-                    Relationship.Link(actions[2]).To(entities[1]).At(decos[0]).OnRun(0).Customise(x => x.Mst = TimeSpan.FromMinutes(8)),
-                    Relationship.Link(actions[3]).To(entities[1]).At(decos[0]).OnRun(0).Customise(x => x.Mst = TimeSpan.FromMinutes(8)),
-                    Relationship.Link(actions[4]).To(entities[2]).At(decos[1]).OnRun(0).Customise(x => x.Mst = TimeSpan.FromMinutes(8)),
-                    Relationship.Link(actions[5]).To(entities[2]).At(decos[1]).OnRun(0).Customise(x =>
-                    {
-                        x.Mst = TimeSpan.FromMinutes(8);
+                    x.Mst = TimeSpan.FromMinutes(8);
 
-                        x.LockBefore = true;
-                    }),
-                    Relationship.Link(actions[6]).To(entities[3]).At(decos[1]).OnRun(0).Customise(x => x.Mst = TimeSpan.FromMinutes(8)),
-                    Relationship.Link(actions[7]).To(entities[3]).At(decos[2]).OnRun(0).Customise(x => x.Mst = TimeSpan.FromMinutes(8)),
-                    Relationship.Link(actions[8]).To(entities[4]).At(decos[3]).OnRun(0).Customise(x => x.Mst = TimeSpan.FromMinutes(8))
-                };
+                    x.LockBefore = true;
+                }),
+                Relationship.Link(actions[6]).To(entities[3]).At(decos[1]).OnRun(0).Customise(x => x.Mst = TimeSpan.FromMinutes(8)),
+                Relationship.Link(actions[7]).To(entities[3]).At(decos[2]).OnRun(0).Customise(x => x.Mst = TimeSpan.FromMinutes(8)),
+                Relationship.Link(actions[8]).To(entities[4]).At(decos[3]).OnRun(0).Customise(x => x.Mst = TimeSpan.FromMinutes(8))
+            };
 
             // Descriptors allow you to customise how the Trackmatic API processes the data
             // Each field has an associated descriptor which allows you to set the authority and default value
@@ -168,74 +161,58 @@ namespace Trackmatic.GettingStarted
                 }
             };
 
+            var reference = "DEMO110";
+
             // Upload various components and create route
             // Note: in order to just upload DECO's entities and actions just ignore the Route field
             var request = new UploadModel
+            {
+                Actions = actions.ToList(),
+                Decos = decos.ToList(),
+                Entities = entities.ToList(),
+                Relationships = relationships.ToList(),
+                Route = new RouteModel
                 {
-                    Actions = actions.ToList(),
-
-                    Decos = decos.ToList(),
-
-                    Entities = entities.ToList(),
-
-                    Relationships = relationships.ToList(),
-
-                    Route = new RouteModel
+                    StartDate = DateTime.UtcNow,
+                    Id = $"{_clientId}/{reference}",
+                    TemplateId = templateId,
+                    Reference = reference,
+                    Registration = "BR31CMGP",
+                    Name = "My New Route Name",
+                    Options = new RouteOptions
+                    {
+                        AutomatedAdjustment = new AutomatedAdjustmentOptions
                         {
-                            StartDate = DateTime.UtcNow,
+                            Enabled = true,
 
-                            Id =  $"{_clientId}/route/demo/83",
-
-                            TemplateId = templateId,
-
-                            Reference = "DEMO83",
-
-                            Registration = "BR31CMGP",
-
-                            Name = "My New Route Name",
-
-                            Options = new RouteOptions
-                                {
-                                    AutomatedAdjustment = new AutomatedAdjustmentOptions
-                                        {
-                                            Enabled = true,
-
-                                            Threshold = TimeSpan.FromMinutes(15)
-                                        },
-
-                                    Lock = new LockOptions
-                                        {
-                                            All = true,
-
-                                            Start = true,
-
-                                            End = true
-                                        },
-
-                                    MaxSpeed = 100,
-
-                                    Strategy = ERouteStrategy.Shortest,
-
-                                    Temperature = 100
-                                },
-
-                            DueTimeAdjustments = new List<DueTimeAdjustmentModel>
-                                {
-                                    new DueTimeAdjustmentModel
-                                        {
-                                            Adjustment = TimeSpan.FromMinutes(30),
-
-                                            Position = new End(),
-
-                                            Type = EDueTimeAdjustmentType.Layover
-                                        }
-                                },
-                            Schedule = false
-
+                            Threshold = TimeSpan.FromMinutes(15)
                         },
+                        Lock = new LockOptions
+                        {
+                            All = true,
+                            Start = true,
+                            End = true
+                        },
+                        MaxSpeed = 100,
+                        Strategy = ERouteStrategy.Shortest,
+                        Temperature = 100
+                    },
+                    DueTimeAdjustments = new List<DueTimeAdjustmentModel>
+                    {
+                        new DueTimeAdjustmentModel
+                        {
+                            Adjustment = TimeSpan.FromMinutes(30),
 
-                    Descriptors = descriptors
-                };
+                            Position = new End(),
+
+                            Type = EDueTimeAdjustmentType.Layover
+                        }
+                    },
+                    Schedule = false
+
+                },
+                Descriptors = descriptors
+            };
 
             var json = request.ToJson(true);
 
@@ -269,26 +246,6 @@ namespace Trackmatic.GettingStarted
 
             //// The save method will perform an optmisation on the route automatically
             //Save(response.Instance);
-        }
-    
-        private static string CreateTemplate()
-        {
-            /*var template = new RouteTemplate
-                {
-                    Id = string.Format("{0}/roadshow", _clientId),
-                    ClientId = _clientId,
-                    Route = new Route
-                        {
-                            Name = "Default",
-                            LockAll = true,
-                            MaxSpeed = 90,
-                            Strategy = ERouteStrategy.Shortest
-                        }
-                };
-            var request = new SaveRouteTemplate(_api.Context, template);
-            _api.ExecuteRequest(request);
-            return template.Id;*/
-            return $"{_clientId}/roadshow";
         }
 
         private static RouteInstanceWithActionsAndGeometry 
