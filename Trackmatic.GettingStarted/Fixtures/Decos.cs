@@ -40,32 +40,54 @@ namespace Trackmatic.GettingStarted.Fixtures
         public static OLocation SandtonCity(string clientId)
         {
             var deco = new OLocation
+            {
+                Name = "Sandton City",
+                Address = "Address of deco",
+                Category = new OLocationCategory {Id = "1", Description = "Category"},
+                ClientId = clientId,
+                Id = $"{clientId}/sandton/1",
+                Reference = "Internal Ref",
+                Shape = EZoneShape.Radius,
+                Coords = new SpecializedObservableCollection<OCoord>
                 {
-                    Name = "Sandton City",
-                    Address = "Address of deco",
-                    Category = new OLocationCategory {Id = "1", Description = "Category"},
-                    ClientId = clientId,
-                    Id = $"{clientId}/sandton/1",
-                    Reference = "Internal Ref",
-                    Shape = EZoneShape.Radius,
-                    Coords = new SpecializedObservableCollection<OCoord>
-                        {
-                            new OCoord {Latitude = -26.110514, Longitude = 28.052889, Radius = 100}
-                        },
-                    DefaultStopTime = TimeSpan.FromMinutes(22),
-                    StructuredAddress = new StructuredAddress
-                        {
-                            StreetNo = "61",
+                    new OCoord {Latitude = -26.110514, Longitude = 28.052889, Radius = 100}
+                },
+                DefaultStopTime = TimeSpan.FromMinutes(22),
+                StructuredAddress = new StructuredAddress
+                {
+                    StreetNo = "61",
 
-                            Street = "Katherine Street",
+                    Street = "Katherine Street",
 
-                            Suburb = "Sandown",
+                    Suburb = "Sandown",
 
-                            City = "Sandton",
+                    City = "Sandton",
 
-                            Province = "Gauteng"
-                        }
-                };
+                    Province = "Gauteng"
+                }
+            };
+            return deco;
+        }
+
+
+        public static OLocation Empty(string clientId, Guid id, string name)
+        {
+            var deco = new OLocation
+            {
+                Name = name,
+                Category = new OLocationCategory { Id = "1", Description = "Category" },
+                ClientId = clientId,
+                Id = $"{clientId}/{id}",
+                Shape = EZoneShape.Radius,
+                Coords = new SpecializedObservableCollection<OCoord> { new OCoord {Latitude = 0, Longitude = 0, Radius = 100} },
+                DefaultStopTime = TimeSpan.FromMinutes(22),
+                StructuredAddress = new StructuredAddress
+                {
+                    StreetNo = "10",
+                    Street = "Knowle Place",
+                    Suburb = "Gresswold"
+                }
+            };
             return deco;
         }
 
