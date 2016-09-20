@@ -1,3 +1,9 @@
+[![NuGet Status](https://img.shields.io/nuget/v/Trackmatic.Rest.Client.svg)](https://www.nuget.org/packages/Trackmatic.Rest.Client/)
+
 # Trackmatic Integration Getting Started Project
 
-Sample project to exaplain how to get up and running with the Trackmatic.Rest API
+## Install With NuGet
+
+    install-package Trackmatic.Rest.Client
+
+[Find out more from the wiki](https://github.com/trackmatic/gettingstarted-dotnet/wiki)
